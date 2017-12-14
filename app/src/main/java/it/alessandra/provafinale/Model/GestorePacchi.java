@@ -58,4 +58,14 @@ public class GestorePacchi implements Serializable {
         return utenti;
     }
 
+    public void setCorrieri(List<Corriere> corrieri){
+        for (Corriere tmp : corrieri){
+            allUsers.add(tmp);
+        }
+    }
+    public void setUtenti(List<Utente> utenti){
+        for (Utente tmp : utenti){
+            allUsers.add(tmp);
+        }
+    }
 }

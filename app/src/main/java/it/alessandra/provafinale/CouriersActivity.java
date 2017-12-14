@@ -62,12 +62,9 @@ public class CouriersActivity extends AppCompatActivity implements TaskDelegate{
         recyclerCouriers.setLayoutManager(linearLayoutManager);
 
         delegate = this;
-        if (gestore == null) {
-            gestore = new GestorePacchi();
-        }
+
         gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
-        //listaCorrieri = gestore.getCouriers();
-        listaCorrieri = new ArrayList<>();
+        listaCorrieri = gestore.getCouriers();
         url = "Users/Corrieri.json";
         restCallCouriers(url);
 
@@ -128,7 +125,7 @@ public class CouriersActivity extends AppCompatActivity implements TaskDelegate{
                     String text = new String (responseBody);
                     try {
                         listaCorrieri = JsonParse.getListCouriers(text);
-//                      gestore.setAllUsers((List<Users>)listaCorrieri));
+                        gestore.setCorrieri(listaCorrieri);
                         mSwipeRefreshLayout.setRefreshing(false);
                         delegate.TaskCompletionResult("Corrieri caricati");
                     }catch (JSONException e){

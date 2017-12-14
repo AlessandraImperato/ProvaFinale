@@ -6,15 +6,24 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.util.List;
+
+import it.alessandra.provafinale.Model.GestorePacchi;
+import it.alessandra.provafinale.Utils.InternalStorage;
+
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences preferences;
     private String control;
+    private GestorePacchi gestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        gestore = new GestorePacchi();
+        InternalStorage.writeObject(getApplicationContext(),"ALLUSER",gestore);
 
         control = "";
 

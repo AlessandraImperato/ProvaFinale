@@ -37,6 +37,8 @@ public class JsonParse {
                         case "password":
                             corriere.setPassword(oneCourier.getString(oneKey2));
                             break;
+                        case "username":
+                            corriere.setUsername(oneCourier.getString(oneKey2));
                     }
                 }
                 corrieri.add(corriere);
