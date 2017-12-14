@@ -16,11 +16,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import it.alessandra.provafinale.Model.Corriere;
 import it.alessandra.provafinale.Model.GestorePacchi;
+import it.alessandra.provafinale.Model.Pacco;
 import it.alessandra.provafinale.Model.Users;
+import it.alessandra.provafinale.Model.Utente;
 import it.alessandra.provafinale.Utils.FirebaseRest;
 import it.alessandra.provafinale.Utils.TaskDelegate;
 import it.alessandra.provafinale.Utils.InternalStorage;
@@ -29,21 +33,27 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
 
     private EditText editUser;
     private EditText editPass;
+    private EditText editNome;
+    private EditText editCognome;
     private Button bSave;
     private Spinner spinnerTipe;
 
     private String username;
     private String password;
+    private String nome;
+    private String cognome;
     private String tipo;
 
     private ProgressDialog dialog;
     private TaskDelegate delegate;
     private static FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private SharedPreferences preferences;
+    private String url;
+
     private GestorePacchi gestore;
     private List<Users> allUser;
-    private String url;
-    private SharedPreferences preferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +62,18 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
 
         editUser = findViewById(R.id.edituserR);
         editPass = findViewById(R.id.editpassR);
+        editCognome = findViewById(R.id.editcognome);
+        editNome = findViewById(R.id.editnome);
         bSave = findViewById(R.id.bsave);
         spinnerTipe = findViewById(R.id.spinner);
 
         delegate = this;
 
-       // gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(), "ALLUSER");
-       // allUser = gestore.getAllUsers();
+        gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(), "ALLUSER");
+        if (gestore == null) {
+            gestore = new GestorePacchi();
+        }
+        allUser = gestore.getAllUsers();
 
         database = FirebaseDatabase.getInstance();
 
@@ -67,6 +82,8 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
             public void onClick(View v) {
                 username = editUser.getText().toString();
                 password = editPass.getText().toString();
+                nome = editNome.getText().toString();
+                cognome = editCognome.getText().toString();
                 tipo = spinnerTipe.getSelectedItem().toString();
 
                 if (username.equals("")) {
@@ -77,11 +94,19 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
                     }
                 } else if (password.equals("")) {
                     Toast.makeText(getApplicationContext(), "Inserire la password", Toast.LENGTH_LONG).show();
+                } else if (nome.equals("") || cognome.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Inserire i dati anagrafici", Toast.LENGTH_LONG).show();
                 } else {
                     if (tipo.equals("Corriere")) {
                         url = "https://provafinale-72a38.firebaseio.com/Users/Corrieri/";
+                        List<Pacco> pacchiC = new ArrayList<>();
+                        Corriere newCorriere = new Corriere(username, password, tipo, nome, cognome, pacchiC);
+                        allUser.add(newCorriere);
                     } else if (tipo.equals("Utente")) {
                         url = "https://provafinale-72a38.firebaseio.com/Users/Utenti/";
+                        List<Pacco> pacchiU = new ArrayList<>();
+                        Utente newUtente = new Utente(username, password, tipo, nome, cognome, pacchiU);
+                        allUser.add(newUtente);
                     }
                     databaseReference = database.getReferenceFromUrl(url);
                     restCallAddUser(url);
@@ -91,16 +116,18 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
 
     }
 
-    public void restCallAddUser(String url){
+    public void restCallAddUser(String url) {
         dialog = new ProgressDialog(SignUpActivity.this);
         dialog.setMessage("Caricamento");
         dialog.show();
-        FirebaseRest.get(url, null, new AsyncHttpResponseHandler(){
+        FirebaseRest.get(url, null, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                if(statusCode == 200){
-                    String text = new String (responseBody);
+                if (statusCode == 200) {
+                    String text = new String(responseBody);
                     databaseReference.child(username).child("password").setValue(password);
+                    databaseReference.child(username).child("nome").setValue(nome);
+                    databaseReference.child(username).child("cognome").setValue(cognome);
                     delegate.TaskCompletionResult("Utente registrato");
                 }
             }
@@ -120,17 +147,19 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("USERNAME", username);
         editor.commit();
+        gestore.setAllUsers(allUser);
+        InternalStorage.writeObject(getApplicationContext(), "ALLUSER", gestore); //salvo in locale
+        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
         if (tipo.equals("Corriere")) {
             editor.putString("LOGIN", "Corriere");
             editor.commit();
-            Intent i = new Intent(getApplicationContext(),PackActivity.class);
+            Intent i = new Intent(getApplicationContext(), PackActivity.class);
             startActivity(i);
         } else if (tipo.equals("Utente")) {
             editor.putString("LOGIN", "Utente");
             editor.commit();
-            Intent i = new Intent(getApplicationContext(),CouriersActivity.class);
+            Intent i = new Intent(getApplicationContext(), CouriersActivity.class);
             startActivity(i);
         }
-        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
     }
 }

@@ -12,7 +12,7 @@ public class Utente extends Users implements Serializable {
         super();
     }
 
-    public Utente(String username, String password, String tipo, List<Pacco> pacchi){
-        super(username,password,tipo,pacchi);
+    public Utente(String username, String password, String tipo, String nome, String cognome, List<Pacco> pacchi){
+        super(username,password,tipo,nome,cognome,pacchi);
     }
 }

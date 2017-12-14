@@ -11,7 +11,7 @@ public class Corriere extends Users implements Serializable{
     public Corriere(){
         super();
     }
-    public Corriere(String username, String password, String tipo, List<Pacco> pacchi){
-        super(username,password,tipo,pacchi);
+    public Corriere(String username, String password, String tipo, String nome, String cognome, List<Pacco> pacchi){
+        super(username,password,tipo,nome,cognome,pacchi);
     }
 }
