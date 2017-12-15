@@ -70,7 +70,6 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
         delegate = this;
 
         gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(), "ALLUSER");
-
         allUser = gestore.getAllUsers();
 
         database = FirebaseDatabase.getInstance();

@@ -63,8 +63,10 @@ public class CouriersActivity extends AppCompatActivity implements TaskDelegate{
 
         delegate = this;
 
-        gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
-        listaCorrieri = gestore.getCouriers();
+        //gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
+        //listaCorrieri = gestore.getCouriers();
+        gestore = new GestorePacchi();
+        listaCorrieri = new ArrayList<>();
         url = "Users/Corrieri.json";
         restCallCouriers(url);
 

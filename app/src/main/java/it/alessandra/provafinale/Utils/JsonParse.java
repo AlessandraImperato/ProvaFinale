@@ -101,6 +101,9 @@ public class JsonParse {
                         case "indirizzo":
                             pacco.setIndirizzo(onePack.getString(oneKey2));
                             break;
+                        case "dimensione":
+                            pacco.setDimensione(onePack.getString(oneKey2));
+                            break;
                     }
                 }
                 pacchi.add(pacco);
@@ -136,8 +139,6 @@ public class JsonParse {
                         case "password":
                             utente1.setPassword(oneUtente.getString(oneKey2));
                             break;
-                        case "username":
-                            utente1.setUsername(oneUtente.getString(oneKey2));
                     }
                 }
                 utenti.add(utente1);
@@ -147,5 +148,53 @@ public class JsonParse {
             e.printStackTrace();
         }
         return utenti;
+    }
+
+    public static List<Users> getAllUser(String json) throws JSONException {
+        List<Users> user = new ArrayList<>();
+
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            Iterator<String> userType = jsonObject.keys();
+            while (userType.hasNext()) {
+                Users users = new Users();
+                String oneKey = userType.next();
+                JSONObject oneUtente = jsonObject.getJSONObject(oneKey);
+                Iterator<String> field = oneUtente.keys();
+                while (field.hasNext()) {
+                    String oneKey2 = field.next();
+                    if(oneKey.equals("Corrieri")){
+                        users.setTipo("Corriere");
+                    }
+                    else if(oneKey.equals("Utenti")){
+                        users.setTipo("Utenti");
+
+                    }
+                    users.setUsername(oneKey2);
+                    JSONObject specific = oneUtente.getJSONObject(oneKey2);
+                    Iterator<String> field2 = specific.keys();
+                    while (field2.hasNext()){
+                        String oneKey3 = field2.next();
+                        switch (oneKey3) {
+                            case "cognome":
+                                users.setCognome(oneUtente.getString(oneKey3));
+                                break;
+                            case "nome":
+                                users.setNome(oneUtente.getString(oneKey3));
+                                break;
+                            case "password":
+                                users.setPassword(oneUtente.getString(oneKey3));
+                                break;
+                        }
+                    }
+                }
+                user.add(users);
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }

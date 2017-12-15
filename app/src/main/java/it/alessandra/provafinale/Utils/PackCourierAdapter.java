@@ -1,6 +1,7 @@
 package it.alessandra.provafinale.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.List;
 
+import it.alessandra.provafinale.AddPackActivity;
 import it.alessandra.provafinale.Model.Pacco;
 import it.alessandra.provafinale.R;
+import it.alessandra.provafinale.SinglePackActivity;
 
 /**
  * Created by utente7.academy on 15/12/2017.
@@ -47,6 +50,15 @@ public class PackCourierAdapter extends RecyclerView.Adapter<PackCourierAdapter.
         holder.id.setText(id);
         holder.destinatario.setText(destinatario);
         holder.data.setText(dataString);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,SinglePackActivity.class);
+                intent.putExtra("IDpacco",id);
+                intent.putExtra("DESTINATARIO",destinatario);
+                (v.getContext()).startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -10,16 +10,16 @@ import java.util.List;
 
 public class GestorePacchi implements Serializable {
     List<Users> allUsers;
-    List<Pacco> allPacks;
+    //List<Pacco> allPacks;
 
     public GestorePacchi(){
         allUsers = new ArrayList<>();
-        allPacks = new ArrayList<>();
+        //allPacks = new ArrayList<>();
     }
 
-    public GestorePacchi(List<Users> allUsers,List<Pacco> allPacks){
+    public GestorePacchi(List<Users> allUsers){
         this.allUsers = allUsers;
-        this.allPacks = allPacks;
+        //this.allPacks = allPacks;
     }
 
     public List<Users> getAllUsers() {
@@ -30,13 +30,13 @@ public class GestorePacchi implements Serializable {
         this.allUsers = allUsers;
     }
 
-    public List<Pacco> getAllPacks() {
-        return allPacks;
-    }
+    //public List<Pacco> getAllPacks() {
+    //    return allPacks;
+   // }
 
-    public void setAllPacks(List<Pacco> allPacks) {
-        this.allPacks = allPacks;
-    }
+    //public void setAllPacks(List<Pacco> allPacks) {
+      //  this.allPacks = allPacks;
+    //}
 
     public List<Corriere> getCouriers(){
         List<Corriere> corrieri = new ArrayList<>();
