@@ -38,13 +38,13 @@ public class CouriersActivity extends AppCompatActivity implements TaskDelegate{
 
     private Toolbar toolbar;
     private SharedPreferences preferences;
-    private Button goPack;
     private RecyclerView recyclerCouriers;
     private LinearLayoutManager linearLayoutManager;
     private CourierAdapter courierAdapter;
     private ProgressDialog dialog;
     private TaskDelegate delegate;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Button goPack;
     private GestorePacchi gestore;
     private List<Corriere> listaCorrieri;
     private String url;

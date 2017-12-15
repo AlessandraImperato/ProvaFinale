@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import it.alessandra.provafinale.Model.Corriere;
+import it.alessandra.provafinale.Model.Pacco;
 
 /**
  * Created by utente7.academy on 14/12/2017.
@@ -63,5 +64,39 @@ public class JsonParse {
             e.printStackTrace();
         }
         return index;
+    }
+
+    public static List<Pacco> getListPack(String json) throws JSONException {
+        List<Pacco> pacchi = new ArrayList<>();
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            Iterator<String> pack = jsonObject.keys();
+            while (pack.hasNext()) {
+                Pacco pacco = new Pacco();
+                String oneKey = pack.next();
+                pacco.setId(oneKey);
+                JSONObject onePack = jsonObject.getJSONObject(oneKey);
+                Iterator<String> field = onePack.keys();
+                while (field.hasNext()) {
+                    String oneKey2 = field.next();
+                    switch (oneKey2) {
+                        case "corriere":
+                            pacco.setCorriereAssegnato(onePack.getString(oneKey2));
+                            break;
+                        case "data di consegna":
+                            pacco.setDataConsegna(SettingDate.formatToDate(onePack.getString(oneKey2)));
+                            break;
+                        case "stato":
+                            pacco.setStato(onePack.getString(oneKey2));
+                            break;
+                    }
+                }
+                pacchi.add(pacco);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return pacchi;
     }
 }

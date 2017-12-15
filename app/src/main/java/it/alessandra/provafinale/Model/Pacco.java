@@ -47,6 +47,13 @@ public class Pacco implements Serializable {
         this.corriereAssegnato = corriereAssegnato;
     }
 
+    public String getCorriereAssegnato() {
+        return corriereAssegnato;
+    }
+
+    public void setCorriereAssegnato(String corriereAssegnato) {
+        this.corriereAssegnato = corriereAssegnato;
+    }
 
     public String getDeposito() {
         return deposito;
