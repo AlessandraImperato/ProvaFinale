@@ -47,12 +47,16 @@ public class CourierAdapter extends RecyclerView.Adapter<CourierAdapter.ViewHold
     @Override
     public void onBindViewHolder(final CourierAdapter.ViewHolder holder, int position) {
         final Corriere tmp = corrieri.get(position);
+        final String nome = tmp.getNome();
+        final String cognome = tmp.getCognome();
         holder.nome.setText(tmp.getNome());
         holder.cognome.setText(tmp.getCognome());
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,AddPackActivity.class);
+                intent.putExtra("NOMECORRIEREASSEGNATO",nome);
+                intent.putExtra("COGNOMECORRIEREASSEGNATO",cognome);
                 (v.getContext()).startActivity(intent);
             }
         });

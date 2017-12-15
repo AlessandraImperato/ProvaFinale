@@ -68,4 +68,16 @@ public class GestorePacchi implements Serializable {
             allUsers.add(tmp);
         }
     }
+
+    public Utente getUtenteByUser(String username){
+        Utente utente = new Utente();
+        for(Users tmp : allUsers){
+            if (tmp instanceof Utente){
+                if (tmp.getUsername().equals(username)){
+                    utente = (Utente) tmp;
+                }
+            }
+        }
+        return utente;
+    }
 }

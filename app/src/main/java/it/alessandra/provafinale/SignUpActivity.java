@@ -54,7 +54,6 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
     private GestorePacchi gestore;
     private List<Users> allUser;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +69,7 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
         delegate = this;
 
         gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(), "ALLUSER");
-        /*if (gestore == null) {
-            gestore = new GestorePacchi();
-        }*/
+
         allUser = gestore.getAllUsers();
 
         database = FirebaseDatabase.getInstance();

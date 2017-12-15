@@ -49,4 +49,19 @@ public class JsonParse {
         }
         return corrieri;
     }
+
+    public static int key(String json) {
+        int index = 1;
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            Iterator iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+                index++;
+                iterator.next();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return index;
+    }
 }

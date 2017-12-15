@@ -15,6 +15,7 @@ public class Pacco implements Serializable {
     private String id;
     private String stato;
     private Date dataConsegna;
+    private String corriereAssegnato;
 
     public Pacco(){
         deposito = null;
@@ -35,6 +36,17 @@ public class Pacco implements Serializable {
         this.stato = stato;
         this.dataConsegna = dataConsegna;
     }
+    public Pacco(String deposito, String indirizzo, String destinatario, String dimensione, String stato, Date dataConsegna, String corriereAssegnato){
+        this.deposito = deposito;
+        this.indirizzo = indirizzo;
+        this.destinatario = destinatario;
+        this.dimensione = dimensione;
+        this.id = null;
+        this.stato = stato;
+        this.dataConsegna = dataConsegna;
+        this.corriereAssegnato = corriereAssegnato;
+    }
+
 
     public String getDeposito() {
         return deposito;
