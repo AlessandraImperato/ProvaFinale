@@ -80,4 +80,16 @@ public class GestorePacchi implements Serializable {
         }
         return utente;
     }
+
+    public Corriere getCorriereByUser(String username){
+        Corriere corriere = new Corriere();
+        for(Users tmp : allUsers){
+            if (tmp instanceof Corriere){
+                if (tmp.getUsername().equals(username)){
+                    corriere = (Corriere) tmp;
+                }
+            }
+        }
+        return corriere;
+    }
 }

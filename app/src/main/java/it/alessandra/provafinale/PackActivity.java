@@ -1,18 +1,56 @@
 package it.alessandra.provafinale;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-public class PackActivity extends AppCompatActivity {
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONException;
+
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+import it.alessandra.provafinale.Model.Corriere;
+import it.alessandra.provafinale.Model.GestorePacchi;
+import it.alessandra.provafinale.Model.Pacco;
+import it.alessandra.provafinale.Model.Users;
+import it.alessandra.provafinale.Model.Utente;
+import it.alessandra.provafinale.Utils.FirebaseRest;
+import it.alessandra.provafinale.Utils.InternalStorage;
+import it.alessandra.provafinale.Utils.JsonParse;
+import it.alessandra.provafinale.Utils.PackAdapter;
+import it.alessandra.provafinale.Utils.PackCourierAdapter;
+import it.alessandra.provafinale.Utils.TaskDelegate;
+
+public class PackActivity extends AppCompatActivity implements TaskDelegate{
 
     private Toolbar toolbar;
     private SharedPreferences preferences;
+    private RecyclerView recyclerPack;
+    private LinearLayoutManager linearLayoutManager;
+    private PackCourierAdapter packCourierAdapter;
+    private ProgressDialog dialog;
+    private TaskDelegate delegate;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private String username;
+    private GestorePacchi gestore;
+    private List<Pacco> listaPacchi;
+    private List<Users> allUser;
+    private Corriere currentCorriere;
+
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +59,31 @@ public class PackActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        recyclerPack = findViewById(R.id.recycleruserpack);
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerPack.setLayoutManager(linearLayoutManager);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        username = preferences.getString("USERNAME","");
+        gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
+        allUser = gestore.getAllUsers();
+        currentCorriere = gestore.getCorriereByUser(username);
+        listaPacchi = currentCorriere.getPacchi();
+
+        delegate = this;
+
+        url = "Users/Corrieri/" + username +"/Pacchi.json";
+
+        restCallPack(url);
+
+        mSwipeRefreshLayout = findViewById(R.id.container);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                restCallPack(url);
+            }
+        });
     }
 
     @Override
@@ -49,5 +112,43 @@ public class PackActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void restCallPack(String url){
+        dialog = new ProgressDialog(PackActivity.this);
+        dialog.setMessage("Caricamento");
+        dialog.show();
+
+        FirebaseRest.get(url, null, new AsyncHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if(statusCode == 200){
+                    String text = new String (responseBody);
+                    try {
+                        listaPacchi = JsonParse.getListPack(text);
+                        currentCorriere.setPacchi(listaPacchi);
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        delegate.TaskCompletionResult("Pacchi caricati");
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                delegate.TaskCompletionResult("Errore caricamento");
+            }
+        });
+    }
+
+    @Override
+    public void TaskCompletionResult(String result) {
+        dialog.dismiss();
+        dialog.cancel();
+        packCourierAdapter = new PackCourierAdapter(listaPacchi,getApplicationContext());
+        recyclerPack.setAdapter(packCourierAdapter);
+        InternalStorage.writeObject(getApplicationContext(),"ALLUSER",gestore);
+        Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
     }
 }

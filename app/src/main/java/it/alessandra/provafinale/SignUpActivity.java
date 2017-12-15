@@ -49,6 +49,7 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
     private static FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private SharedPreferences preferences;
+    private String urlDb;
     private String url;
 
     private GestorePacchi gestore;
@@ -95,25 +96,27 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
                     Toast.makeText(getApplicationContext(), "Inserire i dati anagrafici", Toast.LENGTH_LONG).show();
                 } else {
                     if (tipo.equals("Corriere")) {
-                        url = "https://provafinale-72a38.firebaseio.com/Users/Corrieri/";
+                        urlDb = "https://provafinale-72a38.firebaseio.com/Users/Corrieri";
+                        url = "Users/Corrieri.json";
                         List<Pacco> pacchiC = new ArrayList<>();
                         Corriere newCorriere = new Corriere(username, password, tipo, nome, cognome, pacchiC);
                         allUser.add(newCorriere);
                     } else if (tipo.equals("Utente")) {
-                        url = "https://provafinale-72a38.firebaseio.com/Users/Utenti/";
+                        urlDb = "https://provafinale-72a38.firebaseio.com/Users/Utenti";
+                        url = "Users/Utenti.json";
                         List<Pacco> pacchiU = new ArrayList<>();
                         Utente newUtente = new Utente(username, password, tipo, nome, cognome, pacchiU);
                         allUser.add(newUtente);
                     }
-                    databaseReference = database.getReferenceFromUrl(url);
-                    restCallAddUser(url);
+                    databaseReference = database.getReferenceFromUrl(urlDb);
+                    restCallAddUser(delegate);
                 }
             }
         });
 
     }
 
-    public void restCallAddUser(String url) {
+    public void restCallAddUser(final TaskDelegate delegate) {
         dialog = new ProgressDialog(SignUpActivity.this);
         dialog.setMessage("Caricamento");
         dialog.show();

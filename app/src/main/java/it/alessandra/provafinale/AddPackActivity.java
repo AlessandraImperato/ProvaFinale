@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import it.alessandra.provafinale.Model.Corriere;
 import it.alessandra.provafinale.Model.GestorePacchi;
 import it.alessandra.provafinale.Model.Pacco;
 import it.alessandra.provafinale.Model.Users;
@@ -58,6 +59,10 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
     private Pacco newPacco;
     private Utente currentUtente;
 
+    private List<Pacco> pacchiCorriere;
+    private Corriere currentCourier;
+    private String usernameCourier;
+
     private String username;
     private String stato;
     private String destinatario;
@@ -66,6 +71,7 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
     private TaskDelegate delegate;
     private static FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private DatabaseReference databaseReferenceC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +82,18 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
         database = FirebaseDatabase.getInstance();
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+        gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
         Intent i = getIntent();
         corriereAssegnato = i.getStringExtra("NOMECORRIEREASSEGNATO") + " " + i.getStringExtra("COGNOMECORRIEREASSEGNATO"); ;
         username = preferences.getString("USERNAME","");
 
-        gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
         allUser = gestore.getAllUsers();
         currentUtente = gestore.getUtenteByUser(username);
         listaPacchi = currentUtente.getPacchi();
+
+//        currentCourier = gestore.getCorriereByName(i.getStringExtra("NOMECORRIEREASSEGNATO"));
+  //      pacchiCorriere = currentCourier.getPacchi();
+    //    usernameCourier = currentCourier.getUsername();
 
         destinatario = currentUtente.getNome() + " " + currentUtente.getCognome();
 
@@ -111,9 +121,13 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
                     newPacco = new Pacco(deposito,indirizzo,destinatario,dimensione,stato,dataConsegna,corriereAssegnato);
                     listaPacchi.add(newPacco);
                     currentUtente.setPacchi(listaPacchi);
-                    String url = "https://provafinale-72a38.firebaseio.com/Users/Utenti/" + username +"/";
+                    String url = "https://provafinale-72a38.firebaseio.com/Users/Utenti/" + username;
                     databaseReference = database.getReferenceFromUrl(url);
                     restCallAddUserPack("Users/Utenti/" + username +"/Pacchi.json");
+
+                    //String urlC = "https://provafinale-72a38.firebaseio.com/Users/Corrieri/" + usernameCourier;
+                    //databaseReference = database.getReferenceFromUrl(urlC);
+                    //restCallAddCourierPack("Users/Utenti/" + usernameCourier +"/Pacchi.json");
                 }
             }
         });
@@ -149,6 +163,35 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
         });
 
     }
+
+    /*public void restCallAddCourierPack(String url){
+        dialog = new ProgressDialog(AddPackActivity.this);
+        dialog.setMessage("Invio notifica al corriere");
+        dialog.show();
+        FirebaseRest.get(url, null, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if (statusCode == 200) {
+                    String text = new String (responseBody);
+                    int index = JsonParse.key(text);
+                    newPacco.setId(generaKey(index));
+                    databaseReferenceC.child("Pacchi").child(generaKey(index)).child("deposito").setValue(deposito);
+                    databaseReferenceC.child("Pacchi").child(generaKey(index)).child("indirizzo").setValue(indirizzo);
+                    databaseReferenceC.child("Pacchi").child(generaKey(index)).child("dimensione").setValue(dimensione);
+                    databaseReferenceC.child("Pacchi").child(generaKey(index)).child("stato").setValue(stato);
+                    databaseReferenceC.child("Pacchi").child(generaKey(index)).child("data di consegna").setValue(data);
+                    databaseReferenceC.child("Pacchi").child(generaKey(index)).child("destinatario").setValue(destinatario);
+                    delegate.TaskCompletionResult("Notifica inviata");
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                delegate.TaskCompletionResult("Impossibile notificare");
+            }
+        });
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
