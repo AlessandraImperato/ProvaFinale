@@ -47,10 +47,8 @@ public class PackActivity extends AppCompatActivity implements TaskDelegate{
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private String username;
-    private GestorePacchi gestore;
     private List<Pacco> listaPacchi;
-    private List<Users> allUser;
-    private Corriere currentCorriere;
+
 
     String url;
 
@@ -62,7 +60,7 @@ public class PackActivity extends AppCompatActivity implements TaskDelegate{
         Intent intent = new Intent(getApplicationContext(), PushNotification.class);
         startService(intent);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         recyclerPack = findViewById(R.id.recycleruserpack);
@@ -71,10 +69,6 @@ public class PackActivity extends AppCompatActivity implements TaskDelegate{
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         username = preferences.getString("USERNAME","");
-       // gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
-       // allUser = gestore.getAllUsers();
-       // currentCorriere = gestore.getCorriereByUser(username);
-        //listaPacchi = currentCorriere.getPacchi();
 
         listaPacchi = new ArrayList<>();
 
@@ -133,7 +127,6 @@ public class PackActivity extends AppCompatActivity implements TaskDelegate{
                     String text = new String (responseBody);
                     try {
                         listaPacchi = JsonParse.getListPack(text);
-                        //currentCorriere.setPacchi(listaPacchi);
                         mSwipeRefreshLayout.setRefreshing(false);
                         delegate.TaskCompletionResult("Pacchi caricati");
                     }catch (JSONException e){

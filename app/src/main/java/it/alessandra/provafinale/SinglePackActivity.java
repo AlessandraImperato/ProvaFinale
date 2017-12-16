@@ -96,6 +96,7 @@ public class SinglePackActivity extends AppCompatActivity {
                 databaseReference.child("stato").setValue("In Consegna");
                 Toast.makeText(getApplicationContext(),"Notifica inviata", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(),MapsActivity.class);
+                i.putExtra("INDIRIZZO", pacco.getIndirizzo());
                 startActivity(i);
             }
         });

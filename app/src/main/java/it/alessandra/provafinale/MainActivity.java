@@ -37,11 +37,6 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //String url = "Users.json";
-        //restCall(url);
-       // gestore = new GestorePacchi();
-       // InternalStorage.writeObject(getApplicationContext(),"ALLUSER",gestore);
-
         control = "";
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

@@ -58,7 +58,7 @@ public class PushNotification extends Service {
         super.onCreate();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String username = sharedPreferences.getString("USERNAME","");
-        String type = sharedPreferences.getString("LOGIN","");
+        final String type = sharedPreferences.getString("LOGIN","");
         final String userType = changeType(type);
 
         url = url +userType+"/"+ username +"/Pacchi" ;
@@ -68,14 +68,14 @@ public class PushNotification extends Service {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (userType.equals("Corrieri") && dataSnapshot.exists()) {
+                if (type.equals("Corriere") && dataSnapshot.exists()) {
                     activePushValidation(dataSnapshot.getKey());
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if (userType.equals("Utenti") &&dataSnapshot.exists()) {
+                if (type.equals("Utente") &&dataSnapshot.exists()) {
                     activePushValidation(dataSnapshot.getKey());
                 }
             }
