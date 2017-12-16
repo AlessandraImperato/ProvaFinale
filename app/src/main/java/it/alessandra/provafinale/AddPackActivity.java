@@ -148,6 +148,9 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
                     int index = JsonParse.key(text);
                     newPacco.setId(generaKey(index));
                     idForCourier = generaKey(index);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("IDFORCOURIER", idForCourier);
+                    editor.commit();
                     databaseReference.child("Pacchi").child(generaKey(index)).child("deposito").setValue(deposito);
                     databaseReference.child("Pacchi").child(generaKey(index)).child("indirizzo").setValue(indirizzo);
                     databaseReference.child("Pacchi").child(generaKey(index)).child("dimensione").setValue(dimensione);

@@ -5,11 +5,13 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -20,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import it.alessandra.provafinale.MainActivity;
 import it.alessandra.provafinale.PackActivity;
 import it.alessandra.provafinale.R;
 
@@ -29,8 +32,10 @@ import it.alessandra.provafinale.R;
 
 public class PushNotification extends Service {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference usersReference = database.getReferenceFromUrl("https://provafinale-72a38.firebaseio.com/Users");
+    private String url = "https://provafinale-72a38.firebaseio.com/Users/";
     private ChildEventListener handler;
+    private DatabaseReference usersReference = database.getReferenceFromUrl(url);
+
 
     @Nullable
     @Override
@@ -51,19 +56,26 @@ public class PushNotification extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String username = sharedPreferences.getString("USERNAME","");
+        String type = sharedPreferences.getString("LOGIN","");
+        final String userType = changeType(type);
+
+        url = url +userType+"/"+ username +"/Pacchi" ;
+        usersReference = database.getReferenceFromUrl(url);
 
         handler = new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.exists()) {
+                if (userType.equals("Corrieri") && dataSnapshot.exists()) {
                     activePushValidation(dataSnapshot.getKey());
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.exists()) {
+                if (userType.equals("Utenti") &&dataSnapshot.exists()) {
                     activePushValidation(dataSnapshot.getKey());
                 }
             }
@@ -89,7 +101,7 @@ public class PushNotification extends Service {
     }
 
     public void activePushValidation(String commListener) {
-        Intent intent = new Intent(this, PackActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         sendNotification(intent, "Notifica", commListener);
 
     }
@@ -113,5 +125,15 @@ public class PushNotification extends Service {
 
         /*3*/NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());
+    }
+
+    public String changeType(String type){
+        String newType ="";
+        if (type.equals("Corriere")){
+            newType = "Corrieri";
+        }else if(type.equals("Utente")){
+            newType = "Utenti";
+        }
+        return newType;
     }
 }

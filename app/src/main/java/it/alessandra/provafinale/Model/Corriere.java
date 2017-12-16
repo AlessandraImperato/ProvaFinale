@@ -15,5 +15,5 @@ public class Corriere extends Users implements Serializable{
         super(username,password,tipo,nome,cognome,pacchi);
     }
 
-    
+
 }

@@ -32,6 +32,7 @@ import it.alessandra.provafinale.Utils.CourierAdapter;
 import it.alessandra.provafinale.Utils.FirebaseRest;
 import it.alessandra.provafinale.Utils.InternalStorage;
 import it.alessandra.provafinale.Utils.JsonParse;
+import it.alessandra.provafinale.Utils.PushNotification;
 import it.alessandra.provafinale.Utils.TaskDelegate;
 
 public class CouriersActivity extends AppCompatActivity implements TaskDelegate{
@@ -53,6 +54,9 @@ public class CouriersActivity extends AppCompatActivity implements TaskDelegate{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_couriers);
+
+        Intent intent = new Intent(getApplicationContext(), PushNotification.class);
+        startService(intent);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

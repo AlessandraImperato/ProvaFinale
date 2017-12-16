@@ -18,29 +18,30 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/relativeLayout3">
+        android:layout_below="@+id/relativeLayout3"
+        android:layout_marginTop="37dp">
 
         <Button
             android:id="@+id/consegna"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:text="Notifica la consegna e apri la mappa"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout3"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -51,7 +52,7 @@
                 android:text="TextView"
                 android:textAlignment="viewStart"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="italic" />
 
             <TextView
@@ -61,7 +62,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="TextView"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/indirizzo"
@@ -70,7 +71,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="TextView"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/dim"
@@ -79,7 +80,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="TextView"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
 

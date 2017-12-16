@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Date;
 import java.util.List;
 
@@ -44,10 +47,20 @@ public class SinglePackActivity extends AppCompatActivity {
     private String usernameCourier;
     private Pacco pacco;
 
+    private static FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+    private String url;
+    private String idUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_pack);
+
+
+
+        database = FirebaseDatabase.getInstance();
+
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,12 +75,12 @@ public class SinglePackActivity extends AppCompatActivity {
         destinatario = i.getStringExtra("DESTINATARIO");
         id = i.getStringExtra("IDpacco");
 
-        //gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         usernameCourier = preferences.getString("USERNAME","");
-        //currentCourier = gestore.getCorriereByUser(usernameCourier);
+        idUser = preferences.getString("IDFORCOURIER","");
+
         pacchiCorriere = (List<Pacco>) InternalStorage.readObject(getApplicationContext(),"PACCHICORRIERE");
-        //pacco = currentCourier.findPackById(id);
+
         pacco = findPackById(id);
 
         textDestinatario.setText(destinatario);
@@ -78,6 +91,9 @@ public class SinglePackActivity extends AppCompatActivity {
         inConsegna.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                url = "https://provafinale-72a38.firebaseio.com/Users/Utenti/" + destinatario + "/Pacchi/" + idUser + "/";
+                databaseReference = database.getReferenceFromUrl(url);
+                databaseReference.child("stato").setValue("In Consegna");
                 Toast.makeText(getApplicationContext(),"Notifica inviata", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(),MapsActivity.class);
                 startActivity(i);
