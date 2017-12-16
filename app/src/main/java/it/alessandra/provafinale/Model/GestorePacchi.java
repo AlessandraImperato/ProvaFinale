@@ -30,13 +30,6 @@ public class GestorePacchi implements Serializable {
         this.allUsers = allUsers;
     }
 
-    //public List<Pacco> getAllPacks() {
-    //    return allPacks;
-   // }
-
-    //public void setAllPacks(List<Pacco> allPacks) {
-      //  this.allPacks = allPacks;
-    //}
 
     public List<Corriere> getCouriers(){
         List<Corriere> corrieri = new ArrayList<>();

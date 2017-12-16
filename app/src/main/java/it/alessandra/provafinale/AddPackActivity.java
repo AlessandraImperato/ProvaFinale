@@ -73,6 +73,8 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReferenceC;
 
+    private String idForCourier;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,14 +88,14 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
         Intent i = getIntent();
         corriereAssegnato = i.getStringExtra("NOMECORRIEREASSEGNATO") + " " + i.getStringExtra("COGNOMECORRIEREASSEGNATO"); ;
         username = preferences.getString("USERNAME","");
+        usernameCourier = i.getStringExtra("USERCORRIERE");
 
         allUser = gestore.getAllUsers();
         currentUtente = gestore.getUtenteByUser(username);
         listaPacchi = currentUtente.getPacchi();
 
-//        currentCourier = gestore.getCorriereByName(i.getStringExtra("NOMECORRIEREASSEGNATO"));
-  //      pacchiCorriere = currentCourier.getPacchi();
-    //    usernameCourier = currentCourier.getUsername();
+        currentCourier = gestore.getCorriereByUser(usernameCourier);
+        pacchiCorriere = currentCourier.getPacchi();
 
         destinatario = currentUtente.getNome() + " " + currentUtente.getCognome();
 
@@ -125,9 +127,9 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
                     databaseReference = database.getReferenceFromUrl(url);
                     restCallAddUserPack("Users/Utenti/" + username +"/Pacchi.json");
 
-                    //String urlC = "https://provafinale-72a38.firebaseio.com/Users/Corrieri/" + usernameCourier;
-                    //databaseReference = database.getReferenceFromUrl(urlC);
-                    //restCallAddCourierPack("Users/Utenti/" + usernameCourier +"/Pacchi.json");
+                    String urlC = "https://provafinale-72a38.firebaseio.com/Users/Corrieri/" + usernameCourier;
+                    databaseReferenceC = database.getReferenceFromUrl(urlC);
+                    restCallAddCourierPack("Users/Corrieri/" + usernameCourier +"/Pacchi.json");
                 }
             }
         });
@@ -145,6 +147,7 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
                     String text = new String (responseBody);
                     int index = JsonParse.key(text);
                     newPacco.setId(generaKey(index));
+                    idForCourier = generaKey(index);
                     databaseReference.child("Pacchi").child(generaKey(index)).child("deposito").setValue(deposito);
                     databaseReference.child("Pacchi").child(generaKey(index)).child("indirizzo").setValue(indirizzo);
                     databaseReference.child("Pacchi").child(generaKey(index)).child("dimensione").setValue(dimensione);
@@ -164,7 +167,7 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
 
     }
 
-    /*public void restCallAddCourierPack(String url){
+    public void restCallAddCourierPack(String url){
         dialog = new ProgressDialog(AddPackActivity.this);
         dialog.setMessage("Invio notifica al corriere");
         dialog.show();
@@ -181,6 +184,7 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
                     databaseReferenceC.child("Pacchi").child(generaKey(index)).child("stato").setValue(stato);
                     databaseReferenceC.child("Pacchi").child(generaKey(index)).child("data di consegna").setValue(data);
                     databaseReferenceC.child("Pacchi").child(generaKey(index)).child("destinatario").setValue(destinatario);
+                    databaseReferenceC.child("Pacchi").child(generaKey(index)).child("id").setValue(idForCourier);
                     delegate.TaskCompletionResult("Notifica inviata");
                     finish();
                 }
@@ -191,7 +195,7 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
                 delegate.TaskCompletionResult("Impossibile notificare");
             }
         });
-    }*/
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -57,6 +57,7 @@ public class CourierAdapter extends RecyclerView.Adapter<CourierAdapter.ViewHold
                 Intent intent = new Intent(context,AddPackActivity.class);
                 intent.putExtra("NOMECORRIEREASSEGNATO",nome);
                 intent.putExtra("COGNOMECORRIEREASSEGNATO",cognome);
+                intent.putExtra("USERCORRIERE",tmp.getUsername());
                 (v.getContext()).startActivity(intent);
             }
         });

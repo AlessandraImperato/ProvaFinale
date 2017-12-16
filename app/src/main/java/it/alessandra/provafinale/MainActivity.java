@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         //String url = "Users.json";
         //restCall(url);
-        gestore = new GestorePacchi();
-        InternalStorage.writeObject(getApplicationContext(),"ALLUSER",gestore);
+       // gestore = new GestorePacchi();
+       // InternalStorage.writeObject(getApplicationContext(),"ALLUSER",gestore);
 
         control = "";
 
