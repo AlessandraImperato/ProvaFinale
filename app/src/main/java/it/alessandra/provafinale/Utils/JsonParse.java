@@ -27,6 +27,7 @@ public class JsonParse {
                 Corriere corriere = new Corriere();
                 corriere.setTipo("Corriere");
                 String oneKey = courier.next();
+                corriere.setUsername(oneKey);
                 JSONObject oneCourier = jsonObject.getJSONObject(oneKey);
                 Iterator<String> field = oneCourier.keys();
                 while (field.hasNext()) {
@@ -41,8 +42,6 @@ public class JsonParse {
                         case "password":
                             corriere.setPassword(oneCourier.getString(oneKey2));
                             break;
-                        case "username":
-                            corriere.setUsername(oneCourier.getString(oneKey2));
                     }
                 }
                 corrieri.add(corriere);
