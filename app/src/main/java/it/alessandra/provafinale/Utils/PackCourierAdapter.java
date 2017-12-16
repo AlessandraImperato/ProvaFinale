@@ -54,8 +54,8 @@ public class PackCourierAdapter extends RecyclerView.Adapter<PackCourierAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,SinglePackActivity.class);
-                intent.putExtra("IDpacco",id);
-                intent.putExtra("DESTINATARIO",destinatario);
+                intent.putExtra("IDpacco",tmp.getId());
+                intent.putExtra("DESTINATARIO",tmp.getDestinatario());
                 (v.getContext()).startActivity(intent);
             }
         });

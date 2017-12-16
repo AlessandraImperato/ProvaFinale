@@ -62,12 +62,13 @@ public class SinglePackActivity extends AppCompatActivity {
         destinatario = i.getStringExtra("DESTINATARIO");
         id = i.getStringExtra("IDpacco");
 
-        gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
+        //gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         usernameCourier = preferences.getString("USERNAME","");
-        currentCourier = gestore.getCorriereByUser(usernameCourier);
-        pacchiCorriere = currentCourier.getPacchi();
-        pacco = currentCourier.findPackById(id);
+        //currentCourier = gestore.getCorriereByUser(usernameCourier);
+        pacchiCorriere = (List<Pacco>) InternalStorage.readObject(getApplicationContext(),"PACCHICORRIERE");
+        //pacco = currentCourier.findPackById(id);
+        pacco = findPackById(id);
 
         textDestinatario.setText(destinatario);
         textDimensione.setText(pacco.getDimensione());
@@ -110,5 +111,15 @@ public class SinglePackActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public Pacco findPackById(String id){
+        Pacco pacco = new Pacco();
+        for (Pacco tmp : pacchiCorriere){
+            if(tmp.getId().equals(id)){
+                pacco = tmp;
+            }
+        }
+        return pacco;
     }
 }

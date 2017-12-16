@@ -67,10 +67,12 @@ public class PackActivity extends AppCompatActivity implements TaskDelegate{
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         username = preferences.getString("USERNAME","");
-        gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
-        allUser = gestore.getAllUsers();
-        currentCorriere = gestore.getCorriereByUser(username);
-        listaPacchi = currentCorriere.getPacchi();
+       // gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(),"ALLUSER");
+       // allUser = gestore.getAllUsers();
+       // currentCorriere = gestore.getCorriereByUser(username);
+        //listaPacchi = currentCorriere.getPacchi();
+
+        listaPacchi = new ArrayList<>();
 
         delegate = this;
 
@@ -127,7 +129,7 @@ public class PackActivity extends AppCompatActivity implements TaskDelegate{
                     String text = new String (responseBody);
                     try {
                         listaPacchi = JsonParse.getListPack(text);
-                        currentCorriere.setPacchi(listaPacchi);
+                        //currentCorriere.setPacchi(listaPacchi);
                         mSwipeRefreshLayout.setRefreshing(false);
                         delegate.TaskCompletionResult("Pacchi caricati");
                     }catch (JSONException e){
@@ -149,7 +151,7 @@ public class PackActivity extends AppCompatActivity implements TaskDelegate{
         dialog.cancel();
         packCourierAdapter = new PackCourierAdapter(listaPacchi,getApplicationContext());
         recyclerPack.setAdapter(packCourierAdapter);
-        InternalStorage.writeObject(getApplicationContext(),"ALLUSER",gestore);
+        InternalStorage.writeObject(getApplicationContext(),"PACCHICORRIERE",listaPacchi);
         Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
     }
 }

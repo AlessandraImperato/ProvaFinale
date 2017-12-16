@@ -183,7 +183,7 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
                     databaseReferenceC.child("Pacchi").child(generaKey(index)).child("dimensione").setValue(dimensione);
                     databaseReferenceC.child("Pacchi").child(generaKey(index)).child("stato").setValue(stato);
                     databaseReferenceC.child("Pacchi").child(generaKey(index)).child("data di consegna").setValue(data);
-                    databaseReferenceC.child("Pacchi").child(generaKey(index)).child("destinatario").setValue(destinatario);
+                    databaseReferenceC.child("Pacchi").child(generaKey(index)).child("destinatario").setValue(username);
                     databaseReferenceC.child("Pacchi").child(generaKey(index)).child("id").setValue(idForCourier);
                     delegate.TaskCompletionResult("Notifica inviata");
                     finish();
