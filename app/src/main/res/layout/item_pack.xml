@@ -49,6 +49,14 @@
                 android:text="TextView"
                 android:textAlignment="center"
                 android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/bConsegnato"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Se il tuo pacco è stato consegnato clicca qui" />
+
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

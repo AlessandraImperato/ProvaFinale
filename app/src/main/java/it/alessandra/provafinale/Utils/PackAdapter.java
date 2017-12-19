@@ -7,14 +7,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.List;
 
 import it.alessandra.provafinale.AddPackActivity;
+import it.alessandra.provafinale.CouriersActivity;
 import it.alessandra.provafinale.Model.Corriere;
 import it.alessandra.provafinale.Model.Pacco;
+import it.alessandra.provafinale.NotifyCouriersActivity;
 import it.alessandra.provafinale.R;
 
 /**
@@ -52,6 +56,16 @@ public class PackAdapter  extends RecyclerView.Adapter<PackAdapter.ViewHolder>{
         holder.stato.setText(stato);
         holder.corriere.setText(corriere);
         holder.data.setText(dataString);
+        holder.consegna.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"La consegna è stata notificata al corriere.",Toast.LENGTH_LONG).show();
+                Intent i = new Intent(context, NotifyCouriersActivity.class);
+                i.putExtra("IDPACCOUTENTE",tmp.getId());
+                (v.getContext()).startActivity(i);
+                //lì faccio partire il service per la notifica al corriere
+            }
+        });
     }
 
     @Override
@@ -66,6 +80,7 @@ public class PackAdapter  extends RecyclerView.Adapter<PackAdapter.ViewHolder>{
         public TextView stato;
         public TextView corriere;
         public TextView data;
+        public Button consegna;
 
         public ViewHolder(View v, final Context context){
             super(v);
@@ -74,6 +89,7 @@ public class PackAdapter  extends RecyclerView.Adapter<PackAdapter.ViewHolder>{
             stato = v.findViewById(R.id.stato);
             corriere = v.findViewById(R.id.corriere);
             data = v.findViewById(R.id.data);
+            consegna = v.findViewById(R.id.bConsegnato);
         }
     }
 

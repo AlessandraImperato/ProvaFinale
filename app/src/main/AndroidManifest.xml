@@ -35,7 +35,9 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".AddPackActivity" />
         <activity android:name=".SinglePackActivity" />
-        <activity android:name=".CouriersActivity" />
+        <activity
+            android:name=".CouriersActivity"
+            android:label="Corrieri" />
         <activity android:name=".PackActivity" />
         <activity android:name=".UserPackActivity" />
         <!--
@@ -52,7 +54,10 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".NotifyCouriersActivity"
+                    android:noHistory="true">
+        </activity>
     </application>
 
 </manifest>
