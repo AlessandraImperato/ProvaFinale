@@ -46,6 +46,7 @@ public class PushNotification extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        usersReference.removeEventListener(handler);
     }
 
     @Override

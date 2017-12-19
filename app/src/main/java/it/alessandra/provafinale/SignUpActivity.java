@@ -53,7 +53,8 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
     private String url;
 
     private GestorePacchi gestore;
-    private List<Users> allUser;
+    private List<Corriere> corrieri;
+    private List<Utente> utenti;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +71,11 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
         delegate = this;
 
         gestore = (GestorePacchi) InternalStorage.readObject(getApplicationContext(), "ALLUSER");
-        allUser = gestore.getAllUsers();
-
+        if (gestore == null){
+            gestore = new GestorePacchi();
+        }
+        corrieri = gestore.getAllCouriers();
+        utenti = gestore.getAllUtenti();
         database = FirebaseDatabase.getInstance();
 
         bSave.setOnClickListener(new View.OnClickListener() {
@@ -99,13 +103,13 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
                         url = "Users/Corrieri.json";
                         List<Pacco> pacchiC = new ArrayList<>();
                         Corriere newCorriere = new Corriere(username, password, tipo, nome, cognome, pacchiC);
-                        allUser.add(newCorriere);
+                        corrieri.add(newCorriere);
                     } else if (tipo.equals("Utente")) {
                         urlDb = "https://provafinale-72a38.firebaseio.com/Users/Utenti";
                         url = "Users/Utenti.json";
                         List<Pacco> pacchiU = new ArrayList<>();
                         Utente newUtente = new Utente(username, password, tipo, nome, cognome, pacchiU);
-                        allUser.add(newUtente);
+                        utenti.add(newUtente);
                     }
                     databaseReference = database.getReferenceFromUrl(urlDb);
                     restCallAddUser(delegate);
@@ -146,7 +150,6 @@ public class SignUpActivity extends AppCompatActivity implements TaskDelegate {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("USERNAME", username);
         editor.commit();
-        gestore.setAllUsers(allUser);
         InternalStorage.writeObject(getApplicationContext(), "ALLUSER", gestore); //salvo in locale
         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
         if (tipo.equals("Corriere")) {

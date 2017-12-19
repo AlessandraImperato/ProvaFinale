@@ -10,16 +10,30 @@ import java.util.List;
 
 public class GestorePacchi implements Serializable {
     List<Users> allUsers;
-    //List<Pacco> allPacks;
+    List<Corriere> allCouriers;
+    List<Utente> allUtenti;
 
     public GestorePacchi(){
         allUsers = new ArrayList<>();
-        //allPacks = new ArrayList<>();
+        allUtenti = new ArrayList<>();
+        allCouriers = new ArrayList<>();
     }
 
-    public GestorePacchi(List<Users> allUsers){
-        this.allUsers = allUsers;
-        //this.allPacks = allPacks;
+    public List<Corriere> getAllCouriers() {
+        return allCouriers;
+    }
+
+    public List<Utente> getAllUtenti() {
+        return allUtenti;
+    }
+
+    public void setAllCouriers(List<Corriere> allCouriers) {
+
+        this.allCouriers = allCouriers;
+    }
+
+    public void setAllUtenti(List<Utente> allUtenti) {
+        this.allUtenti = allUtenti;
     }
 
     public List<Users> getAllUsers() {
@@ -31,7 +45,7 @@ public class GestorePacchi implements Serializable {
     }
 
 
-    public List<Corriere> getCouriers(){
+   /* public List<Corriere> getCouriers(){
         List<Corriere> corrieri = new ArrayList<>();
         for(Users tmp : allUsers){
             if(tmp instanceof Corriere){
@@ -39,9 +53,9 @@ public class GestorePacchi implements Serializable {
             }
         }
         return corrieri;
-    }
+    }*/
 
-    public List<Utente> getUtenti(){
+   /* public List<Utente> getUtenti(){
         List<Utente> utenti = new ArrayList<>();
         for(Users tmp : allUsers){
             if(tmp instanceof Utente){
@@ -49,9 +63,9 @@ public class GestorePacchi implements Serializable {
             }
         }
         return utenti;
-    }
+    }*/
 
-    public void setCorrieri(List<Corriere> corrieri){
+   /* public void setCorrieri(List<Corriere> corrieri){
         for (Corriere tmp : corrieri){
             allUsers.add(tmp);
         }
@@ -60,7 +74,7 @@ public class GestorePacchi implements Serializable {
         for (Utente tmp : utenti){
             allUsers.add(tmp);
         }
-    }
+    }*/
 
     public Utente getUtenteByUser(String username){
         Utente utente = new Utente();

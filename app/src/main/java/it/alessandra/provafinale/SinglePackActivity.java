@@ -57,10 +57,7 @@ public class SinglePackActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_pack);
 
-
-
         database = FirebaseDatabase.getInstance();
-
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
