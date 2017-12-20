@@ -89,6 +89,9 @@ public class AddPackActivity extends AppCompatActivity implements TaskDelegate{
         corriereAssegnato = i.getStringExtra("NOMECORRIEREASSEGNATO") + " " + i.getStringExtra("COGNOMECORRIEREASSEGNATO"); ;
         username = preferences.getString("USERNAME","");
         usernameCourier = i.getStringExtra("USERCORRIERE");
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("COURIER", usernameCourier);
+        editor.commit();
 
         allUser = gestore.getAllUsers();
         currentUtente = gestore.getUtenteByUser(username);
